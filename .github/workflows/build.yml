@@ -78,7 +78,7 @@ jobs:
           link-to-sdk: true
 
       - name: Install Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
 
       - name: Install SCons
         shell: bash
@@ -116,7 +116,7 @@ jobs:
           ls -l demo/bin/
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ github.event.repository.name }}
           path: |
