@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import os
 import sys
+import pdb
+
+CacheDir('.scons-cache/')
 
 env = SConscript("godot-cpp/SConstruct")
 

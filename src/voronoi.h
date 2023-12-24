@@ -11,9 +11,15 @@
 #include <map>
 
 namespace godot {
-    class Voronoi : public Object {
-        GDCLASS(Voronoi, Object
-        );
+    class IVoronoi {
+    public:
+        virtual void initialize(const PackedVector2Array &points, const Rect2 &bounds) = 0;
+
+        virtual TypedArray<Site> get_sites() const = 0;
+    };
+
+    class Voronoi : public Object, public IVoronoi {
+    GDCLASS(Voronoi, Object);
 
     private:
         TypedArray<Site> *sites = nullptr;
@@ -28,9 +34,9 @@ namespace godot {
 
         ~Voronoi() override;
 
-        void initialize(const PackedVector2Array &points, const Rect2 &bounds);
+        void initialize(const PackedVector2Array &points, const Rect2 &bounds) override;
 
-        TypedArray<Site> get_sites() const;
+        TypedArray<Site> get_sites() const override;
     };
 } // namespace godot
 

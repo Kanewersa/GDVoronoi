@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+import os
+import sys
+import pdb
+
+CacheDir('.scons-cache/')
+
+env = SConscript("../godot-cpp/SConstruct")
+
+env.Append(CPPPATH=["src/", "../src/", "../lib/voronoi/src/", "../lib/doctest/doctest/", "../lib/trompeloeil/include/"])
+
+sources = Glob("src/*.cpp") + Glob("src/tests/*.cpp") + Glob("../src/*.cpp") + Glob("../src/godot/*.cpp") \
+          + Glob("../lib/doctest/doctest/doctest.h") + Glob("../lib/doctest/doctest/parts/*.cpp") \
+          + Glob("../lib/trompeloeil/include/trompeloeil.hpp")# + Glob("../lib/trompeloeil/include/doctest/trompeloeil.hpp")
+
+
+# Include DocTest header
+# env.Append(CPPPATH=["../lib/doctest/doctest/"])
+# env.Append(LINKFLAGS=[
+#     '-Wl,-rpath,addons/git_for_godot/gdnative/linuxbsd'
+# ])
+#
+if env["platform"] == "macos":
+    library = env.SharedLibrary(
+        "demo/bin/voronoi.{}.{}.framework/voronoi.{}.{}".format(
+            env["platform"], env["target"], env["platform"], env["target"]
+        ),
+        source=sources,
+    )
+elif env["platform"] == "ios":
+    if env["ios_simulator"]:
+        library = env.StaticLibrary(
+            "demo/bin/voronoi.{}.{}.simulator.a".format(env["platform"], env["target"]),
+            source=sources,
+        )
+    else:
+        library = env.StaticLibrary(
+            "demo/bin/voronoi.{}.{}.a".format(env["platform"], env["target"]),
+            source=sources,
+        )
+else:
+    library = env.SharedLibrary(
+        "demo/bin/voronoi{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        source=sources,
+    )
+
+Default(library)
+# env['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME'] = 1
+#
+# env.Append(LIBS=File('../demo/bin/voronoi.windows.template_debug.x86_64.dll'))
+## env.Append(LIBS=File('../godot-cpp/bin/libgodot-cpp.windows.template_debug.x86_64.a'))
+#
+# program = env.Program(target="run_tests", source=sources)#, LIBS=[lib_name], LIBPATH=lib_path)
+# Default(program)

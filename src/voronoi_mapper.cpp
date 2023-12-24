@@ -60,6 +60,10 @@ namespace godot {
 
     void VoronoiMapper::create_site_edges(jcv_site *jcv_site, const Ref<Site> &site,
                                           const Ref<Edge> &edge) {
+        if (!site->graph_edges->is_empty()) {
+            return;
+        }
+
         const jcv_graphedge *jcv_graph_edge = jcv_site->edges;
 
         // Map graph edges, add edge to graph edges.

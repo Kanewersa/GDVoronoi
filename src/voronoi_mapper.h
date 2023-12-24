@@ -11,13 +11,18 @@
 #include "jc_voronoi.h"
 
 namespace godot {
-    class VoronoiMapper {
+    class IVoronoiMapper {
+    public:
+        virtual TypedArray<Site> *map_sites(const jcv_diagram *diagram) = 0;
+    };
+
+    class VoronoiMapper : public IVoronoiMapper {
     public:
         VoronoiMapper();
 
         ~VoronoiMapper();
 
-        TypedArray<Site> *map_sites(const jcv_diagram *diagram);
+        TypedArray<Site> *map_sites(const jcv_diagram *diagram) override;
 
     private:
         std::unordered_map<int, Ref<Site>> sites;

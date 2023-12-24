@@ -22,7 +22,7 @@
 .scons-cache/
 
 # CMake
-cmake-build-debug/
+cmake-build-*/
 CMakeLists.txt
 
 # MacOS
@@ -39,3 +39,8 @@ compile_commands.json
 demo/.godot
 demo/bin/*
 !demo/bin/voronoi.gdextension
+
+# Tests project
+/tests/demov/bin/*.dll
+/tests/demov/bin/*.a
+/tests/demo/.godot

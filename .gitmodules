@@ -6,3 +6,11 @@
 	path = lib/voronoi
 	url = https://github.com/JCash/voronoi
 	branch = master
+[submodule "lib/doctest"]
+	path = lib/doctest
+	url = https://github.com/doctest/doctest.git
+	branch = master
+[submodule "lib/trompeloeil"]
+	path = lib/trompeloeil
+	url = https://github.com/rollbear/trompeloeil.git
+	branch = main

@@ -33,7 +33,6 @@ namespace godot {
         jcv_diagram_generate(points.size(), (const jcv_point *) jcv_points,
                              &bounding_box, nullptr, &diagram);
 
-        mapper->map_sites(&diagram);
         sites = mapper->map_sites(&diagram);
 
         jcv_diagram_free(&diagram);
@@ -47,4 +46,12 @@ namespace godot {
         Array arr;
         return arr;
     }
+
+//    Rect2& Voronoi::get_bounds() {
+//        return bounds;
+//    }
+//
+//    PackedVector2Array& Voronoi::get_points() {
+//        return points;
+//    }
 } // namespace godot
