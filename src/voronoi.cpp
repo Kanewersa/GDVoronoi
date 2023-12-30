@@ -46,12 +46,4 @@ namespace godot {
         Array arr;
         return arr;
     }
-
-//    Rect2& Voronoi::get_bounds() {
-//        return bounds;
-//    }
-//
-//    PackedVector2Array& Voronoi::get_points() {
-//        return points;
-//    }
 } // namespace godot

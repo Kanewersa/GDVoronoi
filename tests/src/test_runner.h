@@ -7,8 +7,8 @@
 #include "doctest.h"
 
 using namespace godot;
-class TestRunner : public Node3D {
-    GDCLASS(TestRunner, Node3D);
+class TestRunner : public SceneTree {
+    GDCLASS(TestRunner, SceneTree);
 
 private:
 

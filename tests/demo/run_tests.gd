@@ -1,4 +1,4 @@
 extends TestRunner
 
-func _ready():
+func _initialize():
 	run_tests()

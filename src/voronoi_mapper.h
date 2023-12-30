@@ -31,7 +31,7 @@ namespace godot {
 
         Ref<Site> get_or_create_site(jcv_site *jcv_site);
 
-        void create_site_edges(jcv_site *jcv_site, const Ref<Site> &site, const Ref<Edge> &edge);
+        void create_site_edges(jcv_site *jcv_site, const Ref<Site> &site, Ref<Edge> edge);
     };
 
 }

@@ -1,7 +1,6 @@
 #ifndef VORONOI_VORONOI_H
 #define VORONOI_VORONOI_H
 
-#include "jc_voronoi.h"
 #include "voronoi_mapper.h"
 #include <cstdio>
 #include <godot_cpp/classes/object.hpp>
@@ -18,8 +17,8 @@ namespace godot {
         virtual TypedArray<Site> get_sites() const = 0;
     };
 
-    class Voronoi : public Object, public IVoronoi {
-    GDCLASS(Voronoi, Object);
+    class Voronoi : public RefCounted, public IVoronoi {
+    GDCLASS(Voronoi, RefCounted);
 
     private:
         TypedArray<Site> *sites = nullptr;

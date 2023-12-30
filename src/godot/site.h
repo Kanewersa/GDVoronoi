@@ -24,7 +24,7 @@ namespace godot {
         ~Site();
 
         Vector2 position;
-        TypedArray<GraphEdge> *graph_edges;
+        TypedArray<GraphEdge> graph_edges;
 
         Vector2 get_position() const;
 

@@ -26,6 +26,8 @@ namespace godot {
 
         Edge();
 
+        ~Edge();
+
         Vector2 get_first_vertex() const;
 
         Vector2 get_second_vertex() const;

@@ -1,5 +1,4 @@
 #include "test_runner.h"
-#include "godot_cpp/variant/utility_functions.hpp"
 using namespace godot;
 
 void TestRunner::_bind_methods() {
@@ -9,5 +8,5 @@ void TestRunner::_bind_methods() {
 void TestRunner::run_tests() {
     int result = doctest::Context(0, nullptr).run();
 
-    get_tree()->quit(result);
+    quit(result);
 }

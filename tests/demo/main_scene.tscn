@@ -3,4 +3,11 @@
 [ext_resource type="Script" path="res://run_tests.gd" id="1_tgbn4"]
 
 [node name="TestRunner" type="TestRunner"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+editor_description = ""
 script = ExtResource("1_tgbn4")

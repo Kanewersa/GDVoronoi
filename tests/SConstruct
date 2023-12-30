@@ -3,16 +3,15 @@ import os
 import sys
 import pdb
 
-CacheDir('.scons-cache/')
+CacheDir('../.scons-cache/')
 
 env = SConscript("../godot-cpp/SConstruct")
 
 env.Append(CPPPATH=["src/", "../src/", "../lib/voronoi/src/", "../lib/doctest/doctest/", "../lib/trompeloeil/include/"])
 
 sources = Glob("src/*.cpp") + Glob("src/tests/*.cpp") + Glob("../src/*.cpp") + Glob("../src/godot/*.cpp") \
-          + Glob("../lib/doctest/doctest/doctest.h") + Glob("../lib/doctest/doctest/parts/*.cpp") \
-          + Glob("../lib/trompeloeil/include/trompeloeil.hpp")# + Glob("../lib/trompeloeil/include/doctest/trompeloeil.hpp")
-
+          + Glob("../lib/doctest/doctest/parts/*.cpp") #\
+          #+ Glob("../lib/trompeloeil/include/trompeloeil.hpp")  # + Glob("../lib/doctest/doctest/doctest.h")
 
 # Include DocTest header
 # env.Append(CPPPATH=["../lib/doctest/doctest/"])
