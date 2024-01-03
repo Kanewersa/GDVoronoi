@@ -78,24 +78,12 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install required libraries
+      - name: Install SCons
         shell: bash
         run: |
-          sudo apt-get -y update
-          sudo apt-get -y install \
-            build-essential \
-            scons \
-            pkg-config \
-            libx11-dev \
-            libxcursor-dev \
-            libxinerama-dev \
-            libgl1-mesa-dev \
-            libglu-dev \
-            libasound2-dev \
-            libpulse-dev \
-            libudev-dev \
-            libxi-dev \
-            libxrandr-dev
+          python -c "import sys; print(sys.version)"
+          python -m pip install scons
+          scons --version
 
       - name: Checkout demo
         uses: actions/checkout@v4

@@ -13,14 +13,14 @@ sources = Glob("src/*.cpp") + Glob("src/godot/*.cpp")
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
-        "demo/bin/voronoi.{}.{}.framework/voronoi.{}.{}".format(
+        "demo/bin/libvoronoi.{}.{}.framework/libvoronoi.{}.{}".format(
             env["platform"], env["target"], env["platform"], env["target"]
         ),
         source=sources,
     )
 else:
     library = env.SharedLibrary(
-        "demo/bin/voronoi{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        "demo/bin/libvoronoi{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
         source=sources,
     )
 
