@@ -4,39 +4,103 @@ on:
   workflow_dispatch:
 
 jobs:
+  run-tests:
+    name: Run tests 🧪
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install SCons
+        shell: bash
+        run: |
+          python -c "import sys; print(sys.version)"
+          python -m pip install scons
+          scons --version
+
+      - name: Checkout demo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Set up SCons cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ github.workspace }}/.scons-cache/
+            ${{ github.workspace }}/tests/.scons-cache/
+            ${{ github.workspace }}/**/.sconsign.dblite
+            ${{ github.workspace }}/godot-cpp/gen/
+          key: tests-${{ github.ref }}-${{ github.sha }}
+          restore-keys: |
+            tests-${{ github.ref }}-${{ github.sha }}
+            tests-${{ github.ref }}
+            tests
+
+      - name: Compile extension
+        shell: sh
+        env:
+          SCONS_CACHE: '${{ github.workspace }}/.scons-cache/'
+          SCONS_CACHE_LIMIT: 8192
+        run: |
+          cd tests
+          scons disable_exceptions=false target=template_debug platform=linux arch=x86_64 -j2
+          ls -l demo/bin/
+
+      - name: Run tests
+        shell: sh
+        run: |
+          cd tests
+          wget https://github.com/godotengine/godot/releases/download/4.2.1-stable/Godot_v4.2.1-stable_linux.x86_64.zip -O godot.zip
+          unzip godot.zip
+          chmod +x Godot_v4.2.1-stable_linux.x86_64
+          ./Godot_v4.2.1-stable_linux.x86_64 --headless --verbose --script run_tests.gd --path ./demo
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: GDVoronoi
+          path: |
+            ${{ github.workspace }}/demo/
+
   build:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.runner }}
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
+    needs: run-tests
     strategy:
       fail-fast: false
       matrix:
         include:
           - identifier: linux-debug
-            name: 🐧 Linux Debug 🪲
+            name: 🐧 Build Linux Debug 🪲
             runner: ubuntu-22.04
             target: template_debug
             platform: linux
             arch: x86_64
           - identifier: linux-release
-            name: 🐧 Linux Release 🚀
+            name: 🐧 Build Linux Release 🚀
             runner: ubuntu-22.04
             target: template_release
             platform: linux
             arch: x86_64
           - identifier: windows-debug
-            name: 🪟 Windows Debug 🪲
+            name: 🪟 Build Windows Debug 🪲
             runner: ubuntu-22.04
             target: template_debug
             platform: windows
             arch: x86_64
           - identifier: windows-release
-            name: 🪟 Windows Release 🚀
+            name: 🪟 Build Windows Release 🚀
             runner: ubuntu-22.04
             target: template_release
             platform: windows
             arch: x86_64
           - identifier: android-release
-            name: 🤖 Android Release 🚀
+            name: 🤖 Build Android Release 🚀
             runner: ubuntu-22.04
             target: template_release
             platform: android
@@ -81,48 +145,14 @@ jobs:
           python -m pip install scons
           scons --version
 
-      - name: Checkout demo
+      - name: Checkout project
         uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Set up SCons cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ${{ github.workspace }}/.scons-cache/
-            ${{ github.workspace }}/tests/.scons-cache/
-            ${{ github.workspace }}/**/.sconsign.dblite
-            ${{ github.workspace }}/godot-cpp/gen/
-          key: ${{ matrix.identifier }}-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            ${{ matrix.identifier }}-${{ github.ref }}-${{ github.sha }}
-            ${{ matrix.identifier }}-${{ github.ref }}
-            ${{ matrix.identifier }}
-
       - name: Compile extension
         shell: sh
-        env:
-          SCONS_CACHE: '${{ github.workspace }}/.scons-cache/'
-          SCONS_CACHE_LIMIT: 8192
         run: |
-          cd tests
           scons disable_exceptions=false target='${{ matrix.target }}' platform='${{ matrix.platform }}' arch='${{ matrix.arch }}' -j2
           ls -l demo/bin/
-
-      - name: Run tests
-        shell: sh
-        run: |
-          cd tests
-          wget https://github.com/godotengine/godot/releases/download/4.2.1-stable/Godot_v4.2.1-stable_linux.x86_64.zip -O godot.zip
-          unzip godot.zip
-          chmod +x Godot_v4.2.1-stable_linux.x86_64
-          ./Godot_v4.2.1-stable_linux.x86_64 --headless --verbose --script run_tests.gd --path ./demo
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: GDVoronoi
-          path: |
-            ${{ github.workspace }}/demo/
