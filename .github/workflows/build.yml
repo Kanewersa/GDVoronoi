@@ -129,6 +129,7 @@ jobs:
       - name: Run tests
         shell: sh
         run: |
+          cd tests
           wget https://github.com/godotengine/godot/releases/download/4.2.1-stable/Godot_v4.2.1-stable_linux.x86_64.zip -O godot.zip
           unzip godot.zip
           chmod +x Godot_v4.2.1-stable_linux.x86_64
@@ -137,6 +138,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}
+          name: GDVoronoi
           path: |
             ${{ github.workspace }}/demo/
