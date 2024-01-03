@@ -1,5 +1,8 @@
 name: 🛠️ Builds
-on: push
+on:
+  push:
+  workflow_dispatch:
+
 jobs:
   build:
     name: ${{ matrix.name }}
@@ -59,13 +62,6 @@ jobs:
         if: ${{ startsWith(matrix.identifier, 'android-') }}
         uses: android-actions/setup-android@v3
 
-      # From Godot docs, might not be necessary.
-      #- name: (Android) Install Android Tools
-      #  if: ${{ startsWith(matrix.identifier, 'android-') }}
-      #  shell: sh
-      #  run: |
-      #    "$ANDROID_SDK_ROOT"/cmdline-tools/latest/bin/sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "platform-tools" "build-tools;30.0.3" "platforms;android-29" "cmdline-tools;latest" "cmake;3.10.2.4988404"
-
       - name: (Android) Install NDK r23c
         if: ${{ matrix.platform == 'android' }}
         uses: nttld/setup-ndk@v1
@@ -112,7 +108,8 @@ jobs:
           SCONS_CACHE_LIMIT: 8192
         run: |
           cd tests
-          scons build_env=development debug_symbols=yes optimize=debug disable_exceptions=false target='${{ matrix.target }}' platform='${{ matrix.platform }}' arch='${{ matrix.arch }}' -j8
+          scons disable_exceptions=false target='${{ matrix.target }}' platform='${{ matrix.platform }}' arch='${{ matrix.arch }}' -j2
+          ls -l demo/bin/
 
       - name: Run tests
         shell: sh
