@@ -1,21 +1,10 @@
 #include "register_types.h"
+#include "test_runner.h"
 #include "voronoi.h"
-
-#include <gdextension_interface.h>
-#include <godot_cpp/core/defs.hpp>
-#include <godot_cpp/godot.hpp>
-
-#define JC_VORONOI_IMPLEMENTATION
-#define JC_VORONOI_IMPLEMENTATION
-#define JCV_REAL_TYPE float
-#define JCV_FLT_MAX FLT_MAX
-//#define JCV_EDGE_INTERSECT_THRESHOLD 1.0e-10F
-
-#include "jc_voronoi.h"
 
 using namespace godot;
 
-void initialize_voronoi_module(ModuleInitializationLevel p_level) {
+void initialize_tests_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
     }
@@ -24,9 +13,10 @@ void initialize_voronoi_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<Site>();
     ClassDB::register_class<Edge>();
     ClassDB::register_class<GraphEdge>();
+    ClassDB::register_class<TestRunner>();
 }
 
-void terminate_voronoi_module(ModuleInitializationLevel p_level) {
+void terminate_tests_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
     }
@@ -35,13 +25,13 @@ void terminate_voronoi_module(ModuleInitializationLevel p_level) {
 extern "C" {
 // Initialization.
 GDExtensionBool GDE_EXPORT
-voronoi_init(GDExtensionInterfaceGetProcAddress
+tests_init(GDExtensionInterfaceGetProcAddress
              p_get_proc_address, const GDExtensionClassLibraryPtr p_library,
              GDExtensionInitialization *r_initialization) {
     godot::GDExtensionBinding::InitObject init_obj(p_get_proc_address, p_library, r_initialization);
 
-    init_obj.register_initializer(initialize_voronoi_module);
-    init_obj.register_terminator(terminate_voronoi_module);
+    init_obj.register_initializer(initialize_tests_module);
+    init_obj.register_terminator(terminate_tests_module);
     init_obj.set_minimum_library_initialization_level(MODULE_INITIALIZATION_LEVEL_SCENE);
 
     return init_obj.init();

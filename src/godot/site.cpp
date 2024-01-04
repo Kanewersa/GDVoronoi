@@ -12,11 +12,10 @@ namespace godot {
 
     TypedArray<GraphEdge> Site::get_edges() const {
         if (graph_edges != nullptr) {
-            return *graph_edges;
+            return graph_edges;
         }
 
-        Array arr;
-        return arr;
+        return Array();
     }
 
     Vector2 Site::get_position() const { return position; }

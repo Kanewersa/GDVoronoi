@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+import os
+import sys
+import pdb
+
+CacheDir('../.scons-cache/')
+
+env = SConscript("../godot-cpp/SConstruct")
+
+env.Append(CPPPATH=["src/", "../src/", "../lib/voronoi/src/", "../lib/doctest/doctest/", "../lib/trompeloeil/include/"])
+
+sources = Glob("src/*.cpp") + Glob("src/tests/*.cpp") + Glob("../src/*.cpp") + Glob("../src/godot/*.cpp") \
+          + Glob("../lib/doctest/doctest/parts/*.cpp")
+
+if env["platform"] == "macos":
+    library = env.SharedLibrary(
+        "demo/bin/libvoronoi.{}.{}.framework/libvoronoi.{}.{}".format(
+            env["platform"], env["target"], env["platform"], env["target"]
+        ),
+        source=sources,
+    )
+elif env["platform"] == "ios":
+    if env["ios_simulator"]:
+        library = env.StaticLibrary(
+            "demo/bin/libvoronoi.{}.{}.simulator.a".format(env["platform"], env["target"]),
+            source=sources,
+        )
+    else:
+        library = env.StaticLibrary(
+            "demo/bin/libvoronoi.{}.{}.a".format(env["platform"], env["target"]),
+            source=sources,
+        )
+else:
+    library = env.SharedLibrary(
+        "demo/bin/libvoronoi{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        source=sources,
+    )
+
+Default(library)

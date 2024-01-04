@@ -4,7 +4,8 @@ namespace godot {
     GraphEdge::GraphEdge() = default;
 
     GraphEdge::~GraphEdge() {
-
+        neighbor.unref();
+        edge.unref();
     }
 
     void GraphEdge::_bind_methods() {

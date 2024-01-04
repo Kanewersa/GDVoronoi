@@ -1,6 +1,6 @@
 [configuration]
 
-entry_symbol = "voronoi_init"
+entry_symbol = "tests_init"
 compatibility_minimum = "4.2"
 
 [libraries]

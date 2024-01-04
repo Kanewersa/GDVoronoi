@@ -22,7 +22,7 @@
 .scons-cache/
 
 # CMake
-cmake-build-debug/
+cmake-build-*/
 CMakeLists.txt
 
 # MacOS
@@ -36,6 +36,13 @@ CMakeLists.txt
 compile_commands.json
 
 # Godot 4+ specific ignores
-demo/.godot
 demo/bin/*
 !demo/bin/voronoi.gdextension
+demo/.godot/*
+!demo/.godot/extension_list.cfg
+
+# Tests project
+tests/demo/bin/*
+!tests/demo/bin/voronoi.gdextension
+tests/demo/.godot/*
+!tests/demo/.godot/extension_list.cfg

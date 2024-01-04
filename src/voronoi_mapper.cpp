@@ -28,11 +28,11 @@ namespace godot {
                 create_site_edges(jcv_edge->sites[1], edge->second_site, edge);
             }
 
+
             jcv_edge = jcv_diagram_get_next_edge(jcv_edge);
         }
 
-        auto *mapped_sites = new TypedArray<Site>();
-
+        TypedArray<Site> *mapped_sites = new TypedArray<Site>();
 
         for (std::pair<const int, Ref<Site>> &pair: sites) {
             mapped_sites->append(Variant(pair.second));
@@ -45,7 +45,7 @@ namespace godot {
         Ref<Site> site(memnew(Site));
         sites[jcv_site->index] = site;
         site->position = Vector2(jcv_site->p.x, jcv_site->p.y);
-        site->graph_edges = new TypedArray<GraphEdge>();
+        site->graph_edges = TypedArray<GraphEdge>();
 
         return site;
     }
@@ -58,15 +58,19 @@ namespace godot {
         }
     }
 
-    void VoronoiMapper::create_site_edges(jcv_site *jcv_site, const Ref<Site> &site,
-                                          const Ref<Edge> &edge) {
+    void VoronoiMapper::create_site_edges(jcv_site *jcv_site, const Ref<Site> &site, Ref<Edge> edge) {
+        if (!site->graph_edges.is_empty()) {
+            return;
+        }
+
         const jcv_graphedge *jcv_graph_edge = jcv_site->edges;
 
         // Map graph edges, add edge to graph edges.
         while (jcv_graph_edge) {
             Ref<GraphEdge> graph_edge(memnew(GraphEdge));
 
-            graph_edge->edge = edge;
+            // TODO: Fix memory error on engine exit when edge is assigned to graph_edge.
+            //graph_edge->edge = edge;
             graph_edge->first_vertex =
                     Vector2(jcv_graph_edge->pos[0].x, jcv_graph_edge->pos[0].y);
             graph_edge->second_vertex =
@@ -74,11 +78,11 @@ namespace godot {
             graph_edge->angle = jcv_graph_edge->angle;
             if (site == edge->first_site) {
                 graph_edge->neighbor = edge->second_site;
-            } else {
+            } else if (site == edge->second_site) {
                 graph_edge->neighbor = edge->first_site;
             }
 
-            site->graph_edges->append(Variant(graph_edge));
+            site->graph_edges.append(Variant(graph_edge));
             jcv_graph_edge = jcv_graph_edge->next;
         }
     }

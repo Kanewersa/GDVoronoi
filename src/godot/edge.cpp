@@ -3,6 +3,8 @@
 namespace godot {
     Edge::Edge() = default;
 
+    Edge::~Edge() = default;
+
     void Edge::_bind_methods() {
         ClassDB::bind_method(D_METHOD("get_first_vertex"), &Edge::get_first_vertex);
         ClassDB::bind_method(D_METHOD("get_second_vertex"), &Edge::get_second_vertex);
