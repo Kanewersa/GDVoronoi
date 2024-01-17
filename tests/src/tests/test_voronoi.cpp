@@ -7,7 +7,7 @@ using namespace godot;
 
 class MockMapper : public godot::IVoronoiMapper {
 public:
-    MAKE_MOCK1 (map_sites, TypedArray<Site>*(const jcv_diagram*), override);
+    MAKE_MOCK1 (map_voronoi, TypedArray<Site>(const jcv_diagram*), override);
 };
 
 class MockVoronoi : public godot::IVoronoi {
@@ -50,6 +50,9 @@ TEST_SUITE("Voronoi") {
 
         voronoi->initialize(points, bounds);
 
+        CHECK_EQ(voronoi->get_points(), points);
+        CHECK_EQ(voronoi->get_bounds(), bounds);
+        
         TypedArray<Site> sites = voronoi->get_sites();
         REQUIRE_EQ(sites.size(), 3);
 
