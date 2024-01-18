@@ -29,7 +29,6 @@ func _ready():
 		graph_line.default_color = Color.BLUE
 		var polygon_points = PackedVector2Array()
 		
-		var duplicates = []
 		for graph_edge in site.get_edges():
 			var v1 = graph_edge.get_first_vertex()
 			polygon_points.append(v1)

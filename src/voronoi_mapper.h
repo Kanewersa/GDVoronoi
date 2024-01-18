@@ -13,7 +13,9 @@
 namespace godot {
     class IVoronoiMapper {
     public:
-        virtual TypedArray<Site> *map_sites(const jcv_diagram *diagram) = 0;
+        virtual void map_voronoi(const jcv_diagram *diagram) = 0;
+
+        virtual ~IVoronoiMapper() = default;
     };
 
     class VoronoiMapper : public IVoronoiMapper {
@@ -22,16 +24,27 @@ namespace godot {
 
         ~VoronoiMapper();
 
-        TypedArray<Site> *map_sites(const jcv_diagram *diagram) override;
+        void map_voronoi(const jcv_diagram *diagram) override;
+
+        TypedArray<Site> get_sites();
+        TypedArray<GraphEdge> get_half_edges();
+        TypedArray<Edge> get_edges();
 
     private:
-        std::unordered_map<int, Ref<Site>> sites;
+
+        std::unordered_map<int, Ref<Site>> sites_mapping;
+
+        TypedArray<Site> sites;
+        TypedArray<GraphEdge> half_edges;
+        TypedArray<Edge> edges;
 
         Ref<Site> create_site(jcv_site *jcv_site);
 
+        Ref<Edge> create_edge(const jcv_edge *jcv_edge);
+
         Ref<Site> get_or_create_site(jcv_site *jcv_site);
 
-        void create_site_edges(jcv_site *jcv_site, const Ref<Site> &site, Ref<Edge> edge);
+        void create_half_edges(jcv_site *jcv_site, const Ref<Site> &site, Ref<Edge> edge);
     };
 
 }
